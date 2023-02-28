@@ -1,21 +1,22 @@
 // code voor de esp aan het laserpaneel
 
-#include <arduino.h>
+#include <Arduino.h>
 #include <esp_now.h>
 #include <WiFi.h>
 
 
-int sw1;  // selectie motor 1
-int sw2;  // selectie motor 2
-int sw3;  // selectie motor 3
-int pin_sw1, pin_sw2, pin_sw3;  // digitale pin
+int sw1, sw2, sw3;  // selectie motor 
+int pin_sw1 = 5;
+int pin_sw2 = 18; 
+int pin_sw3 = 4;  
 int motor1, motor2, motor3; 
 
 int vrx;  // reading joystick (zijwaarts draaien spiegels)
 int vry;  // reading joystick (omhoog - omlaag draaien spiegels)
-int pin_vrx, pin_vry;  // analoge pin
+int pin_vrx = 32 ;  // adc pin
+int pin_vry = 33;  // adc pin
 
-uint8_t broadcastAddress_motor1[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};  //mac adress van esp verbonden met motor1
+uint8_t broadcastAddress_motor1[] = {0xEC, 0x62, 0x60, 0x9D, 0x28, 0xF8};  //mac adress van esp verbonden met motor1
 uint8_t broadcastAddress_motor2[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};  //mac adress van esp verbonden met motor2
 uint8_t broadcastAddress_motor3[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};  //mac adress van esp verbonden met motor3
 
@@ -37,14 +38,14 @@ esp_now_peer_info_t peerInfo;
 
 // Callback when data is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  Serial.print("\r\nLast Packet Send Status:\t");
+  char macStr[18];
+  Serial.print("Packet to: ");
+  // Copies the sender mac address to a string
+  snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
+           mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+  Serial.print(macStr);
+  Serial.print(" send status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
-  if (status ==0){
-    success = "Delivery Success :)";
-  }
-  else{
-    success = "Delivery Fail :(";
-  }
 }
 
 void setup(){
@@ -74,39 +75,37 @@ void setup(){
   // get the status of Trasnmitted packet
   esp_now_register_send_cb(OnDataSent);
   
+
+  peerInfo.channel = 0;  
+  peerInfo.encrypt = false;
   // motor1
   // Register peer
   memcpy(peerInfo.peer_addr, broadcastAddress_motor1, 6);
-  peerInfo.channel = 0;  
-  peerInfo.encrypt = false;
+
   
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
-    Serial.println("Failed to add peer");
+    Serial.println("Failed to add peer 1");
     return;
   }
 
   // motor2
   // Register peer
   memcpy(peerInfo.peer_addr, broadcastAddress_motor2, 6);
-  peerInfo.channel = 0;  
-  peerInfo.encrypt = false;
   
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
-    Serial.println("Failed to add peer");
+    Serial.println("Failed to add peer 2");
     return;
   }
 
   // motor3
   // Register peer
   memcpy(peerInfo.peer_addr, broadcastAddress_motor3, 6);
-  peerInfo.channel = 0;  
-  peerInfo.encrypt = false;
   
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
-    Serial.println("Failed to add peer");
+    Serial.println("Failed to add peer 3");
     return;
   }
   
@@ -157,11 +156,15 @@ void loop(){
     esp_err_t result = esp_now_send(broadcastAddress_motor3, (uint8_t *) &joystick_readings, sizeof(joystick_readings));
   }
   else{
-    esp_err_t result = ESP_OK;
+    esp_err_t result = ESP_ERR_INVALID_CRC ;  // hier mag hij niets versturen
   }
 
   if (result == ESP_OK) {
     Serial.println("Sent with success");
+    Serial.println(vrx);
+  }
+  if (result = ESP_ERR_INVALID_CRC){
+    Serial.println("No esp selected");
   }
   else {
     Serial.println("Error sending the data");
