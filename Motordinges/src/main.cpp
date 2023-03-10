@@ -10,8 +10,8 @@
 //motoren
 int pin_pwm1 = 25;  // pwm motor 1 (horizontale beweging)
 int pin_dir1 = 32;  // direction motor 1 (horizontale beweging)
-int pin_pwm2;  // pwm motor 2 (verticale beweging)
-int pin_dir2;  // direction motor 2 (verticale beweging)
+int pin_pwm2 = 26;  // pwm motor 2 (verticale beweging)
+int pin_dir2 = 12;  // direction motor 2 (verticale beweging)
 
 //communicatie
 //Structure example to receive data

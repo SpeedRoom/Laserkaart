@@ -113,9 +113,14 @@ void setup(){
 
 void loop(){
   // motoren en schakelaars
-  sw1 = digitalRead(pin_sw1);
+  Serial.print("sw1 = ");
+  Serial.println(sw1);
   sw2 = digitalRead(pin_sw2);
+  Serial.print("sw2 = ");
+  Serial.println(sw2);
   sw3 = digitalRead(pin_sw3);
+  Serial.print("sw3 = ");
+  Serial.println(sw3);
 
   if(sw1==1 & sw2==0 & sw3==0){ //prioriteiten van de motoren 1>2>3
     motor1 = 1;
