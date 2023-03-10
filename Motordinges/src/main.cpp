@@ -1,8 +1,14 @@
 // code voor de esp's aan de motoren
+// naam esp: espmotor
+// wachtwoord esp: espmotor
 
 #include <Arduino.h>
 #include <esp_now.h>
 #include <WiFi.h>
+#include "OTAlib.h"
+
+//OTA
+OTAlib ota("NETGEAR68", "excitedtuba713");
 
 #define JOYSTICK_LAAG 500
 #define JOYSTICK_HOOG 1500
@@ -39,6 +45,11 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 
 void setup() {
   Serial.begin(115200);
+
+  // OTA
+  ota.setHostname("espmotor");  
+  ota.setPassword("espmotor");
+  ota.begin();
 
   // motoren
   pinMode(pin_pwm1, OUTPUT);

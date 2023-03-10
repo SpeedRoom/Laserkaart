@@ -1,8 +1,14 @@
 // code voor de esp aan het laserpaneel
+// naam esp: esplaser
+// wachtwoord esp: esplaser
 
 #include <Arduino.h>
 #include <esp_now.h>
 #include <WiFi.h>
+#include "OTAlib.h"
+
+//OTA
+OTAlib ota("NETGEAR68", "excitedtuba713");
 
 
 int sw1, sw2, sw3;  // selectie motor 
@@ -51,6 +57,11 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void setup(){
   // Init Serial Monitor
   Serial.begin(115200);
+
+  // OTA
+  ota.setHostname("esplaser");  
+  ota.setPassword("esplaser");
+  ota.begin();
 
   // motoren en schakelaars
   pinMode(pin_sw1, INPUT);
