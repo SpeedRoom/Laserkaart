@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "symbolen_laserdinges")(type "KiCad")(uri "${KIPRJMOD}/Libs/symbolen_laserdinges.kicad_sym")(options "")(descr ""))
+)
