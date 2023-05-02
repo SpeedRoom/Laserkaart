@@ -1,0 +1,18 @@
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-F_Cu.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-B_Cu.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-F_Silkscreen.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-B_Silkscreen.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-F_Mask.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-B_Mask.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-Edge_Cuts.gbr'.
+Created Gerber job file 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\Laserdinges-job.gbrjob'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-F_Cu.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-B_Cu.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-F_Silkscreen.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-B_Silkscreen.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-F_Mask.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-B_Mask.gbr'.
+Plotted to 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-Edge_Cuts.gbr'.
+Created Gerber job file 'C:\Users\sienp\Documents\school\IIW3\Project\PCB_Laserdinges\gerberv2\Laserdinges-job.gbrjob'.
+Info: Done.
+Info: Done.

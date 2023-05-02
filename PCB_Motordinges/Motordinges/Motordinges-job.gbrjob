@@ -5,17 +5,17 @@
       "Application": "Pcbnew",
       "Version": "7.0.1"
     },
-    "CreationDate": "2023-04-20T22:59:21+02:00"
+    "CreationDate": "2023-04-20T23:02:29+02:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
-      "Name": "Laserdinges",
-      "GUID": "4c617365-7264-4696-9e67-65732e6b6963",
+      "Name": "Motordinges",
+      "GUID": "4d6f746f-7264-4696-9e67-65732e6b6963",
       "Revision": "rev?"
     },
     "Size": {
-      "X": 60.6536,
-      "Y": 49.9856
+      "X": 65.7336,
+      "Y": 43.0006
     },
     "LayerNumber": 2,
     "BoardThickness": 1.6,
@@ -34,37 +34,37 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "Laserdinges-F_Cu.gbr",
+      "Path": "Motordinges-F_Cu.gbr",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Laserdinges-B_Cu.gbr",
+      "Path": "Motordinges-B_Cu.gbr",
       "FileFunction": "Copper,L2,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Laserdinges-F_Silkscreen.gbr",
+      "Path": "Motordinges-F_Silkscreen.gbr",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Laserdinges-B_Silkscreen.gbr",
+      "Path": "Motordinges-B_Silkscreen.gbr",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "Laserdinges-F_Mask.gbr",
+      "Path": "Motordinges-F_Mask.gbr",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "Laserdinges-B_Mask.gbr",
+      "Path": "Motordinges-B_Mask.gbr",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "Laserdinges-Edge_Cuts.gbr",
+      "Path": "Motordinges-Edge_Cuts.gbr",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     }
