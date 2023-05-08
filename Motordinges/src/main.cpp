@@ -47,8 +47,8 @@ void setup() {
   Serial.begin(115200);
 
   // OTA
-  ota.setHostname("espmotor3");  
-  ota.setPassword("espmotor3");
+  ota.setHostname("espmotor1");  
+  ota.setPassword("espmotor1");
   ota.begin();
 
   // motoren
