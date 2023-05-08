@@ -12,19 +12,19 @@ OTAlib ota("NETGEAR68", "excitedtuba713");
 
 
 int sw1, sw2, sw3;  // selectie motor 
-int pin_sw1 = 5;
+int pin_sw1 = 19;
 int pin_sw2 = 18; 
-int pin_sw3 = 4;  
+int pin_sw3 = 21;  
 int motor1, motor2, motor3; 
 
 int vrx;  // reading joystick (zijwaarts draaien spiegels)
 int vry;  // reading joystick (omhoog - omlaag draaien spiegels)
-int pin_vrx = 32 ;  // adc pin
-int pin_vry = 33;  // adc pin
+int pin_vrx = 33 ;  // adc pin
+int pin_vry = 32;  // adc pin
 
-uint8_t broadcastAddress_motor1[] = {0xEC, 0x62, 0x60, 0x9D, 0x28, 0xF8};  //mac adress van esp verbonden met motor1
-uint8_t broadcastAddress_motor2[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};  //mac adress van esp verbonden met motor2
-uint8_t broadcastAddress_motor3[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};  //mac adress van esp verbonden met motor3
+uint8_t broadcastAddress_motor1[] = {0x78, 0xE3, 0x6D, 0x09, 0xB1, 0x94};  //mac adress van esp verbonden met motor1
+uint8_t broadcastAddress_motor2[] = {0x40, 0x22, 0xD8, 0xE9, 0x11, 0xC8};  //mac adress van esp verbonden met motor2
+uint8_t broadcastAddress_motor3[] = {0xB4, 0x8A, 0x0A, 0x46, 0xA6, 0x6C};  //mac adress van esp verbonden met motor3
 
 
 // Variable to store if sending data was successful
@@ -85,7 +85,6 @@ void setup(){
   // Once ESPNow is successfully Init, we will register for Send CB to
   // get the status of Trasnmitted packet
   esp_now_register_send_cb(OnDataSent);
-  
 
   peerInfo.channel = 0;  
   peerInfo.encrypt = false;
@@ -93,7 +92,6 @@ void setup(){
   // Register peer
   memcpy(peerInfo.peer_addr, broadcastAddress_motor1, 6);
 
-  
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer 1");
@@ -124,6 +122,7 @@ void setup(){
 
 void loop(){
   // motoren en schakelaars
+  sw1 = digitalRead(pin_sw1);
   Serial.print("sw1 = ");
   Serial.println(sw1);
   sw2 = digitalRead(pin_sw2);

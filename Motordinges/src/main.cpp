@@ -15,9 +15,9 @@ OTAlib ota("NETGEAR68", "excitedtuba713");
 
 //motoren
 int pin_pwm1 = 25;  // pwm motor 1 (horizontale beweging)
-int pin_dir1 = 32;  // direction motor 1 (horizontale beweging)
+int pin_dir1 = 23;  // direction motor 1 (horizontale beweging)
 int pin_pwm2 = 26;  // pwm motor 2 (verticale beweging)
-int pin_dir2 = 12;  // direction motor 2 (verticale beweging)
+int pin_dir2 = 13;  // direction motor 2 (verticale beweging)
 
 //communicatie
 //Structure example to receive data
@@ -47,8 +47,8 @@ void setup() {
   Serial.begin(115200);
 
   // OTA
-  ota.setHostname("espmotor");  
-  ota.setPassword("espmotor");
+  ota.setHostname("espmotor1");  
+  ota.setPassword("espmotor1");
   ota.begin();
 
   // motoren
