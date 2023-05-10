@@ -56,8 +56,9 @@ void setup() {
   pinMode(pin_dir1, OUTPUT);
   pinMode(pin_pwm2, OUTPUT);
   pinMode(pin_dir2, OUTPUT);
-
-
+  
+  digitalWrite(pin_pwm1, HIGH);  // motor 1 draait niet
+  digitalWrite(pin_pwm2, HIGH);  // motor 2 draait niet
   //communicatie
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
