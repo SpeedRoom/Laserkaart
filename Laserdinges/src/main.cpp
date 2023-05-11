@@ -15,14 +15,14 @@ int sw1, sw2, sw3;  // selectie motor
 int pin_sw1 = 19;
 int pin_sw2 = 18; 
 int pin_sw3 = 21;  
-int motor1, motor2, motor3; 
+bool motor1, motor2, motor3; 
 
 int vrx;  // reading joystick (zijwaarts draaien spiegels)
 int vry;  // reading joystick (omhoog - omlaag draaien spiegels)
 int pin_vrx = 33 ;  // adc pin
 int pin_vry = 32;  // adc pin
 
-uint8_t broadcastAddress_motor1[] = {0x78, 0xE3, 0x6D, 0x09, 0xB1, 0x94};  //mac adress van esp verbonden met motor1
+uint8_t broadcastAddress_motor1[] = {0xB4, 0x8A, 0x0A, 0x46, 0xC4, 0xB0};  //mac adress van esp verbonden met motor1
 uint8_t broadcastAddress_motor2[] = {0x40, 0x22, 0xD8, 0xE9, 0x11, 0xC8};  //mac adress van esp verbonden met motor2
 uint8_t broadcastAddress_motor3[] = {0xB4, 0x8A, 0x0A, 0x46, 0xA6, 0x6C};  //mac adress van esp verbonden met motor3
 
@@ -80,7 +80,6 @@ void setup(){
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
-    return;
   }
 
   // Once ESPNow is successfully Init, we will register for Send CB to
@@ -89,6 +88,7 @@ void setup(){
 
   peerInfo.channel = 0;  
   peerInfo.encrypt = false;
+
   // motor1
   // Register peer
   memcpy(peerInfo.peer_addr, broadcastAddress_motor1, 6);
@@ -96,11 +96,9 @@ void setup(){
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer 1");
-    return;
   }
   else if (esp_now_add_peer(&peerInfo) == ESP_OK){
     Serial.println("peer 1 added");
-    return;
   }
 
   // motor2
@@ -110,11 +108,9 @@ void setup(){
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer 2");
-    return;
   }
   else if (esp_now_add_peer(&peerInfo) == ESP_OK){
     Serial.println("peer 2 added");
-    return;
   }
 
   // motor3
@@ -124,11 +120,9 @@ void setup(){
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer 3");
-    return;
   }
   else if (esp_now_add_peer(&peerInfo) == ESP_OK){
     Serial.println("peer 3 added");
-    return;
   }
   Serial.println("Setup done");
 }
@@ -146,27 +140,27 @@ void loop(){
   Serial.println(sw3);
 
   if(sw1==1 & sw2==0 & sw3==0){ //prioriteiten van de motoren 1>2>3
-    motor1 = 1;
-    motor2 = 0;
-    motor3 = 0;
+    motor1 = true;
+    motor2 = false;
+    motor3 = false;
     Serial.println("motor 1 gekozen");
   }
   else if(sw1==0 & sw2==1 & sw3==0){
-    motor1 = 0;
-    motor2 = 1;
-    motor3 = 0;
+    motor1 = false;
+    motor2 = true;
+    motor3 = false;
     Serial.println("motor 2 gekozen");
   }
   else if(sw1==0 & sw2==0 & sw3==1){
-    motor1 = 0;
-    motor2 = 0;
-    motor3 = 1;
+    motor1 = false;
+    motor2 = false;
+    motor3 = true;
     Serial.println("motor 3 gekozen");    
   }
   else{
-    motor1 = 0;
-    motor2 = 0;
-    motor3 = 0;
+    motor1 = false;
+    motor2 = false;
+    motor3 = false;
   }
 
   // joystick
@@ -177,30 +171,29 @@ void loop(){
   joystick_readings.vry_send = vry;
 
   // communicatie
-  if(motor1==1){
+  if(motor1){
     esp_err_t result = esp_now_send(broadcastAddress_motor1, (uint8_t *) &joystick_readings, sizeof(joystick_readings));
   }
-  else if(motor2==1){
+  if(motor2){
     esp_err_t result = esp_now_send(broadcastAddress_motor2, (uint8_t *) &joystick_readings, sizeof(joystick_readings));
   }
-  else if(motor3==1){
+  if(motor3){
     esp_err_t result = esp_now_send(broadcastAddress_motor3, (uint8_t *) &joystick_readings, sizeof(joystick_readings));
   }
-  else{
-    esp_err_t result = ESP_ERR_INVALID_CRC ;  // hier mag hij niets versturen
-  }
+  // else{
+  //   esp_err_t result = ESP_ERR_INVALID_CRC ;  // hier mag hij niets versturen
+  // }
 
   if (result == ESP_OK) {
     Serial.println("Sent with success");
     Serial.println(vrx);
-  }
-  if (result = ESP_ERR_INVALID_CRC){
-    Serial.println("No esp selected");
+    Serial.println(vry);
   }
   else {
     Serial.println("Error sending the data");
   }
  
-  delay(200);  // elke 0.2s opnieuw meten en doorsturen
+  vTaskDelay(500);  // elke 0.2s opnieuw meten en doorsturen
+  //taskYIELD();
 
 }

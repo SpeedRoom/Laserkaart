@@ -130,7 +130,6 @@ void setup() {
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
-    return;
   }
 
   // Register for a callback function that will be called when data is received
@@ -148,6 +147,8 @@ void loop() {
   //- MQTT
   //client.publish(topic, "loop");
   client.publish(topic, (char*) incoming_vrx);
+  client.publish(topic, (char*) incoming_vry);
+  client.publish(topic, (char*) WiFi.macAddress);
 
   // motor 1 besturen met vrx
   if(incoming_vrx < JOYSTICK_LAAG){
@@ -176,5 +177,6 @@ void loop() {
   }
 
   delay(200);  // elke 0.2s opnieuw meten en doorsturen
+  //taskYIELD();
 
 }
