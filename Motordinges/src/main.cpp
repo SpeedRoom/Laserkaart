@@ -6,9 +6,67 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include "OTAlib.h"
+#include <PubSubClient.h>
 
 //OTA
 OTAlib ota("NETGEAR68", "excitedtuba713");
+
+//MQTT -
+#define SSID          "NETGEAR68"
+#define PWD           "excitedtuba713"
+#define MQTT_SERVER   "192.168.1.61"  
+#define MQTT_PORT     1883
+#define topic  "esp_motor/output"
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup_wifi()
+{
+  delay(10);
+  Serial.println("Connecting to WiFi..");
+  WiFi.begin(SSID, PWD);
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("MAC address: ");
+  Serial.println(WiFi.macAddress());
+}
+
+void reconnect()
+{
+  // Loop until we're reconnected
+  while (!client.connected())
+  {
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    // creat unique client ID
+    // in Mosquitto broker enable anom. access
+    if (client.connect("ESP32Client"))
+    {
+      Serial.println("connected");
+      // Subscribe
+      client.subscribe(topic);
+    }
+    else
+    {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 1 second");
+      vTaskDelay(1000/portTICK_RATE_MS);
+    }
+    taskYIELD();
+  }
+}
+//- MQTT
 
 #define JOYSTICK_LAAG 500
 #define JOYSTICK_HOOG 1500
@@ -46,6 +104,11 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 void setup() {
   Serial.begin(115200);
 
+  //MQTT -
+  setup_wifi();
+  client.setServer(MQTT_SERVER, MQTT_PORT);
+  // - MQTT
+
   // OTA
   ota.setHostname("espmotor1");  
   ota.setPassword("espmotor1");
@@ -59,6 +122,7 @@ void setup() {
   
   digitalWrite(pin_pwm1, HIGH);  // motor 1 draait niet
   digitalWrite(pin_pwm2, HIGH);  // motor 2 draait niet
+  Serial.println("motoren draaien niet");
   //communicatie
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
@@ -75,6 +139,16 @@ void setup() {
 }
 
 void loop() {
+
+  //MQTT -
+  if (!client.connected()){
+    reconnect();
+  }
+  client.loop();
+  //- MQTT
+  //client.publish(topic, "loop");
+  client.publish(topic, (char*) incoming_vrx);
+
   // motor 1 besturen met vrx
   if(incoming_vrx < JOYSTICK_LAAG){
     digitalWrite(pin_dir1, HIGH);  // motor 1 draait in ene richting
