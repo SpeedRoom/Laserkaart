@@ -57,6 +57,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 void setup(){
   // Init Serial Monitor
   Serial.begin(115200);
+  Serial.println("setup begin");
 
   // OTA
   ota.setHostname("esplaser");  
@@ -97,6 +98,10 @@ void setup(){
     Serial.println("Failed to add peer 1");
     return;
   }
+  else if (esp_now_add_peer(&peerInfo) == ESP_OK){
+    Serial.println("peer 1 added");
+    return;
+  }
 
   // motor2
   // Register peer
@@ -105,6 +110,10 @@ void setup(){
   // Add peer        
   if (esp_now_add_peer(&peerInfo) != ESP_OK){
     Serial.println("Failed to add peer 2");
+    return;
+  }
+  else if (esp_now_add_peer(&peerInfo) == ESP_OK){
+    Serial.println("peer 2 added");
     return;
   }
 
@@ -117,7 +126,11 @@ void setup(){
     Serial.println("Failed to add peer 3");
     return;
   }
-  
+  else if (esp_now_add_peer(&peerInfo) == ESP_OK){
+    Serial.println("peer 3 added");
+    return;
+  }
+  Serial.println("Setup done");
 }
 
 void loop(){
@@ -136,16 +149,19 @@ void loop(){
     motor1 = 1;
     motor2 = 0;
     motor3 = 0;
+    Serial.println("motor 1 gekozen");
   }
   else if(sw1==0 & sw2==1 & sw3==0){
     motor1 = 0;
     motor2 = 1;
     motor3 = 0;
+    Serial.println("motor 2 gekozen");
   }
   else if(sw1==0 & sw2==0 & sw3==1){
     motor1 = 0;
     motor2 = 0;
-    motor3 = 1;    
+    motor3 = 1;
+    Serial.println("motor 3 gekozen");    
   }
   else{
     motor1 = 0;
