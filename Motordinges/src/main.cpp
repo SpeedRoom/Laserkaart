@@ -7,12 +7,13 @@
 #include <WiFi.h>
 #include "OTAlib.h"
 #include <PubSubClient.h>
+#include <esp_wifi.h>
 
 //OTA
 OTAlib ota("NETGEAR68", "excitedtuba713");
 
 //MQTT -
-#define SSID          "NETGEAR68"
+#define SSID1          "NETGEAR68"
 #define PWD           "excitedtuba713"
 #define MQTT_SERVER   "192.168.1.61"  
 #define MQTT_PORT     1883
@@ -25,7 +26,7 @@ void setup_wifi()
 {
   delay(10);
   Serial.println("Connecting to WiFi..");
-  WiFi.begin(SSID, PWD);
+  WiFi.begin(SSID1, PWD);
 
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -101,12 +102,25 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   Serial.println(incoming_vrx);
 }
 
+int32_t getWiFiChannel(const char *ssid) {
+  if (int32_t n = WiFi.scanNetworks()) {
+      for (uint8_t i=0; i<n; i++) {
+          if (!strcmp(ssid, WiFi.SSID(i).c_str())) {
+              return WiFi.channel(i);
+          }
+      }
+  }
+  return 0;
+}
+
 void setup() {
+
+
   Serial.begin(115200);
 
   //MQTT -
   setup_wifi();
-  client.setServer(MQTT_SERVER, MQTT_PORT);
+  // client.setServer(MQTT_SERVER, MQTT_PORT);
   // - MQTT
 
   // OTA
@@ -125,7 +139,9 @@ void setup() {
   Serial.println("motoren draaien niet");
   //communicatie
   // Set device as a Wi-Fi Station
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_AP_STA);
+  int32_t channel =getWiFiChannel(SSID1);
+  esp_wifi_set_channel(channel, WIFI_SECOND_CHAN_NONE);
 
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
@@ -140,15 +156,15 @@ void setup() {
 void loop() {
 
   //MQTT -
-  if (!client.connected()){
-    reconnect();
-  }
-  client.loop();
+  // if (!client.connected()){
+  //   reconnect();
+  // }
+  // client.loop();
   //- MQTT
   //client.publish(topic, "loop");
   client.publish(topic, (char*) incoming_vrx);
   client.publish(topic, (char*) incoming_vry);
-  client.publish(topic, (char*) WiFi.macAddress);
+  // client.publish(topic, (char*) WiFi.macAddress);
 
   // motor 1 besturen met vrx
   if(incoming_vrx < JOYSTICK_LAAG){

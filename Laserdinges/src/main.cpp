@@ -6,7 +6,8 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include "OTAlib.h"
-
+#include <esp_wifi.h>
+#define SSID1          "NETGEAR68"
 //OTA
 OTAlib ota("NETGEAR68", "excitedtuba713");
 
@@ -22,7 +23,7 @@ int vry;  // reading joystick (omhoog - omlaag draaien spiegels)
 int pin_vrx = 33 ;  // adc pin
 int pin_vry = 32;  // adc pin
 
-uint8_t broadcastAddress_motor1[] = {0xB4, 0x8A, 0x0A, 0x46, 0xC4, 0xB0};  //mac adress van esp verbonden met motor1
+uint8_t broadcastAddress_motor1[] = {0xAC, 0x67, 0xB2, 0x30, 0x29, 0xE8};  //mac adress van esp verbonden met motor1
 uint8_t broadcastAddress_motor2[] = {0x40, 0x22, 0xD8, 0xE9, 0x11, 0xC8};  //mac adress van esp verbonden met motor2
 uint8_t broadcastAddress_motor3[] = {0xB4, 0x8A, 0x0A, 0x46, 0xA6, 0x6C};  //mac adress van esp verbonden met motor3
 
@@ -54,7 +55,20 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
+int32_t getWiFiChannel(const char *ssid) {
+  if (int32_t n = WiFi.scanNetworks()) {
+      for (uint8_t i=0; i<n; i++) {
+          if (!strcmp(ssid, WiFi.SSID(i).c_str())) {
+              return WiFi.channel(i);
+          }
+      }
+  }
+  return 0;
+}
+
+
 void setup(){
+
   // Init Serial Monitor
   Serial.begin(115200);
   Serial.println("setup begin");
@@ -75,7 +89,9 @@ void setup(){
 
   //communicatie
   // Set device as a Wi-Fi Station
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_AP_STA);
+  int32_t channel =getWiFiChannel(SSID1);
+  esp_wifi_set_channel(channel, WIFI_SECOND_CHAN_NONE);
 
   // Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
