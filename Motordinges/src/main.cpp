@@ -9,7 +9,12 @@
 #include <esp_wifi.h>
 
 //OTA
-OTAlib ota("WiFi-2.4-017A", "5FAFC34859");
+OTAlib ota("telenet-64BBF56", "hTHzysaudk73");
+
+
+
+
+
 
 
 #define JOYSTICK_LAAG 500
@@ -48,11 +53,6 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 void setup() {
   Serial.begin(115200);
 
-  //OTA
-  ota.setHostname("espmotor1");  
-  ota.setPassword("espmotor1");
-  ota.begin();
-
   // motoren
   pinMode(pin_pwm1, OUTPUT);
   pinMode(pin_dir1, OUTPUT);
@@ -73,7 +73,7 @@ void setup() {
   // Register for a callback function that will be called when data is received
   esp_now_register_recv_cb(OnDataRecv);
 
-
+  taskYIELD();
 }
 
 void loop() {
